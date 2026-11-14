@@ -137,6 +137,15 @@ placeholder="الكود الشخصي">
 دخول المسابقة
 </button>
 
+<button onclick="createRoom()"
+style="
+background:#111827;
+margin-top:10px;
+">
+إنشاء غرفة للخادم
+</button>
+
+
 <div id="success" class="success"></div>
 
 <div id="error" class="error"></div>
@@ -160,7 +169,38 @@ supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
+async function createRoom(){
 
+const pin =
+Math.floor(
+100000 + Math.random() * 900000
+).toString();
+
+const { error } =
+await client
+.from("quiz_rooms")
+.insert([
+{
+pin: pin,
+title: "Church Quiz",
+status: "waiting"
+}
+]);
+
+if(error){
+
+alert(error.message);
+return;
+}
+
+alert("PIN : " + pin);
+
+localStorage.setItem(
+"church_host_pin",
+pin
+);
+
+}
 async function joinQuiz(){
 
 document.getElementById("success").style.display="none";
